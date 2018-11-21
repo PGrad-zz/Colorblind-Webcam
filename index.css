@@ -1,5 +1,15 @@
 #webcam {
 	display: block;
 	display: none;
+	visibility: hidden;
 }
 
+#video-canvas {
+	display: block;
+	display: none;
+	visibility: hidden;
+}
+
+#real-canvas {
+	line-height: 0;
+}

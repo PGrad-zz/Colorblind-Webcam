@@ -9,7 +9,6 @@ function main() {
 		video.srcObject = stream;
 		video.oncanplay = () => {
 			render(video);
-			video.play();
 		};
 	}).catch(() => {
 		alert("\"What a shame\" - JC Denton");

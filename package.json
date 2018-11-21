@@ -1,0 +1,15 @@
+{
+  "name": "how_they_see_it",
+  "version": "1.0.0",
+  "description": "What do colorblind people see?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Grad",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "glslCanvas": "^0.1.7"
+  }
+}

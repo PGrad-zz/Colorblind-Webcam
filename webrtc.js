@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-function get_webcam() {
+module.exports = () => {
 	return window.navigator.mediaDevices.getUserMedia({
 		audio: false,
 		video: { facingMode: 'user' }

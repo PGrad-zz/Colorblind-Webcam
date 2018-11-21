@@ -1,5 +1,7 @@
-'use strict'
+'use strict';
 
+const get_webcam = require('./webrtc.js');
+const render = require('./render.js');
 
 function main() {
 	get_webcam().then((stream) => {

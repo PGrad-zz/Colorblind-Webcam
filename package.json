@@ -9,7 +9,6 @@
   "author": "Paul Grad",
   "license": "ISC",
   "dependencies": {
-    "browserify": "^16.2.3",
     "glslCanvas": "^0.1.7"
   }
 }

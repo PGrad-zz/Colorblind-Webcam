@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const GlslCanvas = require('glslCanvas');
 
 var buffer;
@@ -10,7 +10,7 @@ function setCanvasToClientDims() {
 	buffer.height = document.documentElement.clientHeight / 2;
 }
 
-function render(video) {
+module.exports = (video) => {
 	buffer = document.getElementById('video-canvas');
 	setCanvasToClientDims(buffer);
 	window.addEventListener('resize', setCanvasToClientDims);

@@ -7,7 +7,7 @@ module.exports = {
 		void main() {
 			vec2 uv = gl_FragCoord.xy / u_resolution.xy;
 			vec3 col = texture2D(u_texture, uv).rgb;
-			gl_FragColor = vec4(0, 0, col.b, 1);
+			gl_FragColor = vec4(col, 1);
 		}
 	`
 };

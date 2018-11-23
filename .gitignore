@@ -4,3 +4,7 @@
 !*.css
 !package.json
 !.gitignore
+!Makefile
+!*.py
+!palette_extraction
+bundle.js

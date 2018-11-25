@@ -1,10 +1,4 @@
-#webcam {
-	display: block;
-	display: none;
-	visibility: hidden;
-}
-
-#video-canvas {
+.hidden {
 	display: block;
 	display: none;
 	visibility: hidden;

@@ -25,6 +25,7 @@ module.exports = (video) => {
 	let rendervideo = () => {
 		buffer.getContext('2d').drawImage(video, 0, 0, buffer.width, buffer.height);
 		canvas.setUniform('u_texture', buffer.toDataURL());
+		canvas.setUniform('u_start_r', 4);
 		window.requestAnimationFrame(rendervideo);
 	};
 	rendervideo();

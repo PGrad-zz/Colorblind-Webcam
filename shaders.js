@@ -6,69 +6,20 @@ module.exports = {
 		uniform vec2 u_resolution;
 		uniform float u_start_r;
 
-		float lessbool(float val, float cmp) {
-			float res = min(val, cmp);
-			return res == cmp ? 0. : res == 0. ? 1. : res / res;
+		vec3 rgb2hsv(vec3 c) {
+		    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+		    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+		    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+		 
+		    float d = q.x - min(q.w, q.y);
+		    float e = 1.0e-10;
+		    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 		}
 
-		float grtrbool(float val, float cmp) {
-			float res = max(val, cmp);
-			return res == cmp ? 0. : res == 0. ? 1. : res / res;
-		}
-
-		float eqbool(float val, float cmp) {
-			return val == cmp ? 1. : 0.;
-		}
-
-		float hue2rgb(float p, float q, float t) {
-			if(t < 0.) t += 1.;
-			if(t > 1.) t -= 1.;
-			return t < .16667 ? (p + (q - p) * 6. * t)            :
-			       t < .5     ? q                                 :
-			       t < .6667  ? (p + (q - p) * (.66667 - t) * .6) :
-			       p;
-		}
-
-		vec3 hsl2rgb(float _h, float _s, float _l) {
-			vec3 rgb = vec3(0);
-			float r, g, b;
-			float q, p;
-			if(_s == 0.)
-				r = g = b = _l;
-			else {
-				q = _l <= 0.5 ? _l * (1. + _s) : (_l + _s - _l * _s);
-				p = 2. * _l - q;
-				r = hue2rgb(p, q, _h + .33333);
-				g = hue2rgb(p, q, _h);
-				b = hue2rgb(p, q, _h - .33333);
-			}
-
-			return vec3(r, g, b);
-		}
-
-		vec3 hsl2rgb(vec3 hsl) {
-			return hsl2rgb(hsl.r, hsl.g, hsl.b);
-		}
-
-		vec3 rgb2hsl(float _r, float _g, float _b) {
-			float max_ch = max(max(_r, _g), _b);
-			float min_ch = min(min(_r, _g), _b);
-			float max_i = _r == max_ch ? 1. : _g == max_ch ? 2. : 3.;
-			vec3 hsl = vec3(0);
-			hsl.z = (max_ch + min_ch) * .5;
-			if(max_ch != min_ch) {
-				float d = max_ch - min_ch;
-				hsl.y = hsl.z > .5 ? (d / (2. - max_ch + min_ch)) : (d / (max_ch + min_ch));
-				hsl.x = max_i == 1. ? ((_g - _b) / d) :
-				        max_i == 2. ? ((_b - _r) / d + 2.) :
-						                  ((_r - _g) / d + 4.);
-				hsl.x /= 6.;
-			}
-			return hsl;
-		}
-
-		vec3 rgb2hsl(vec3 hsl) {
-			return rgb2hsl(hsl.r, hsl.g, hsl.b);
+		vec3 hsv2rgb(vec3 c) {
+		    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+		    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+		    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 		}
 
 		vec2 texCoordMap(vec2 uv) {
@@ -81,19 +32,20 @@ module.exports = {
 		}
 
 		float map_hue(float h) {
-			return rgb2hsl(char_hue(h)).x;
+			return rgb2hsv(char_hue(h)).x;
 		}
 
 		vec3 map_color_into_palette(vec3 rgb) {
-			vec3 hsl_orig = rgb2hsl(rgb);
-			return hsl2rgb(map_hue(hsl_orig.x), hsl_orig.y, hsl_orig.z);
+			vec3 hsv_orig = rgb2hsv(rgb);
+			return hsv2rgb(vec3(map_hue(hsv_orig.x), hsv_orig.y, hsv_orig.z));
 		}
 
 		void main() {
 			vec2 uv = gl_FragCoord.xy / u_resolution.xy;
 			vec3 col = texture2D(u_texture, uv).rgb;
-			//vec3 col = vec3(uv.x, 0, uv.y);
+			//vec3 col = vec3(uv.x, uv.y, 0);
+			//vec3 col = texture2D(u_tex0, uv).rgb;
 			gl_FragColor = vec4(map_color_into_palette(col), 1.);
 		}
 	`
-};
+}

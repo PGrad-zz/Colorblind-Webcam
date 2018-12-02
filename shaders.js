@@ -35,9 +35,14 @@ module.exports = {
 			return rgb2hsv(char_hue(h)).x;
 		}
 
+		float hsv_modulo(float h) {
+			float angle = h * 360.;
+			return mod(angle, 360.) / 360.;
+		}
+
 		vec3 map_color_into_palette(vec3 rgb) {
 			vec3 hsv_orig = rgb2hsv(rgb);
-			return hsv2rgb(vec3(map_hue(hsv_orig.x), hsv_orig.y, hsv_orig.z));
+			return hsv2rgb(vec3(hsv_modulo(map_hue(hsv_orig.x)), hsv_orig.y, hsv_orig.z));
 		}
 
 		void main() {
